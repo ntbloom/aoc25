@@ -1,8 +1,18 @@
-import one
-
-
-def main():
-    print("Hello from aoc25!")
+try:
+    import one  # noqa
+    import two  # noqa
+    import three  # noqa
+    import four  # noqa
+    import five  # noqa
+    import six  # noqa
+    import seven  # noqa
+    import eight  # noqa
+    import nine  # noqa
+    import ten  # noqa
+    import eleven  # noqa
+    import twelve  # noqa
+except ImportError:
+    pass
 
 
 if __name__ == "__main__":
@@ -27,7 +37,8 @@ if __name__ == "__main__":
         11: "eleven",
         12: "twelve",
     }
+
     try:
         print(eval(f"{days[day]}.{'one' if puzzle == 1 else 'two'}()"))
-    except Exception:
+    except (KeyError, NameError):
         raise ValueError(f"day/puzzle not done yet: day {day} puzzle {puzzle}")

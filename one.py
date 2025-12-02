@@ -1,4 +1,4 @@
-from pathlib import Path
+from methods import get_path
 
 
 class Dial:
@@ -33,7 +33,7 @@ class Dial:
 
 
 def one() -> str:
-    with open((Path(__file__).parent.joinpath("inputs").joinpath("1.txt")), "r") as f:
+    with open(get_path(1), "r") as f:
         dial = Dial(50)
         for line in f:
             direction = line[0]
@@ -52,7 +52,7 @@ def one() -> str:
 
 
 def two() -> str:
-    with open((Path(__file__).parent.joinpath("inputs").joinpath("1.txt")), "r") as f:
+    with open(get_path(1), "r") as f:
         dial = Dial(50)
         for line in f:
             direction = line[0]
