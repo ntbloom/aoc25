@@ -39,6 +39,8 @@ if __name__ == "__main__":
     }
 
     try:
-        print(eval(f"{days[day]}.{'one' if puzzle == 1 else 'two'}()"))
+        ans = eval(f"{days[day]}.{'one' if puzzle == 1 else 'two'}()")
+        print("\n-----------------------------------------------")
+        print(f"Answer for day {day} puzzle {puzzle}:\n{ans}")
     except (KeyError, NameError):
         raise ValueError(f"day/puzzle not done yet: day {day} puzzle {puzzle}")
