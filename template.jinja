@@ -1,15 +1,15 @@
 from methods import get_path
 
-DAY = 2
+DAY = {{ day }}
 
 
-def one() -> str:
+def one() -> {{ return_type }}:
     with open(get_path(DAY), "r") as f:
         pass
-    return ""
+    return {{ sentinel }}
 
 
-def two() -> str:
+def two() -> {{ return_type }}:
     with open(get_path(DAY), "r") as f:
         pass
-    return ""
+    return {{ sentinel }}

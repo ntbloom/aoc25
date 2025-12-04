@@ -1,3 +1,5 @@
+#! /usr/bin/env -S uv run --script
+
 try:
     import one  # noqa
     import two  # noqa
@@ -27,8 +29,18 @@ def print_puzzle(day: int, puzzle: int):
 if __name__ == "__main__":
     from sys import argv
 
-    day = int(argv[1])
-    puzzle = int(argv[2]) if len(argv) == 3 else -1
+    match len(argv):
+        case 1:
+            raise ValueError("must provide day")
+        case 2:
+            day = int(argv[1])
+            puzzle = -1
+        case 3:
+            day = int(argv[1])
+            puzzle = int(argv[2])
+        case _:
+            raise ValueError("Only day and puzzle args supported")
+
     assert 0 < day < 13, "must be between day 1 and 12"
     assert puzzle == 1 or puzzle == 2 or puzzle == -1, "must be puzzle 1 or 2"
 
