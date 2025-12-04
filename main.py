@@ -15,13 +15,22 @@ except ImportError:
     pass
 
 
+def print_puzzle(day: int, puzzle: int):
+    try:
+        ans = eval(f"{days[day]}.{'one' if puzzle == 1 else 'two'}()")
+        print("\n-----------------------------------------------")
+        print(f"Answer for day {day} puzzle {puzzle}:\n{ans}")
+    except KeyError, NameError:
+        raise ValueError(f"day/puzzle not done yet: day {day} puzzle {puzzle}")
+
+
 if __name__ == "__main__":
     from sys import argv
 
     day = int(argv[1])
-    puzzle = int(argv[2])
+    puzzle = int(argv[2]) if len(argv) == 3 else -1
     assert 0 < day < 13, "must be between day 1 and 12"
-    assert puzzle == 1 or puzzle == 2, "must be puzzle 1 or 2"
+    assert puzzle == 1 or puzzle == 2 or puzzle == -1, "must be puzzle 1 or 2"
 
     days = {
         1: "one",
@@ -37,10 +46,8 @@ if __name__ == "__main__":
         11: "eleven",
         12: "twelve",
     }
-
-    try:
-        ans = eval(f"{days[day]}.{'one' if puzzle == 1 else 'two'}()")
-        print("\n-----------------------------------------------")
-        print(f"Answer for day {day} puzzle {puzzle}:\n{ans}")
-    except (KeyError, NameError):
-        raise ValueError(f"day/puzzle not done yet: day {day} puzzle {puzzle}")
+    if puzzle == -1:
+        print_puzzle(day, 1)
+        print_puzzle(day, 2)
+    else:
+        print_puzzle(day, puzzle)
