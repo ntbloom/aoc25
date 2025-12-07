@@ -43,7 +43,7 @@ class Graph:
                 node.print()
             print()
 
-    def traverse(self, node: Node):
+    def tachyon(self, node: Node):
         if node.visited:
             return
         if node.row == self.length:
@@ -51,18 +51,20 @@ class Graph:
             return
         node.visited = True
         match node.char:
-            case "." | "S":
-                self.traverse(self.grid[node.row + 1][node.col])
+            case "S":
+                self.tachyon(self.grid[node.row + 1][node.col])
+            case ".":
+                self.tachyon(self.grid[node.row + 1][node.col])
             case "^":
                 node.split = True
-                self.traverse(self.grid[node.row + 1][node.col - 1])
-                self.traverse(self.grid[node.row + 1][node.col + 1])
+                self.tachyon(self.grid[node.row + 1][node.col - 1])
+                self.tachyon(self.grid[node.row + 1][node.col + 1])
             case _:
                 raise ValueError(f"unexpected char: {node.char}")
 
     def count_splits(self) -> int:
         assert self.start
-        self.traverse(self.start)
+        self.tachyon(self.start)
         count = 0
         for row in self.grid:
             for node in row:
