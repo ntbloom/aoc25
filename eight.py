@@ -38,29 +38,34 @@ class Graph:
         self.boxes: set[JunctionBox] = set()
         self.length = length
         self.node_counter = 0
+        self.marked: tuple[JunctionBox, JunctionBox] | None = None
+        self.single: set[JunctionBox] = set()
+        self.remaining: set[JunctionBox] = set()
 
         for _ in range(self.length):
             first, second = self.sorted_distances.pop()
             self.boxes.add(first)
             self.boxes.add(second)
+            self.remaining.add(first)
+            self.remaining.add(second)
             first.neighbors.add(second)
             second.neighbors.add(first)
 
-    def count1(self, box: JunctionBox):
+    def count(self, box: JunctionBox):
         if box.visited:
             return
         box.visited = True
         self.boxes.remove(box)
         self.node_counter += 1
         for neighbor in box.neighbors:
-            self.count1(neighbor)
+            self.count(neighbor)
 
-    def solve1(self) -> int:
+    def solve(self) -> int:
         lengths: list[int] = []
         while len(self.boxes) != 0:
             curr = self.boxes.pop()
             self.boxes.add(curr)
-            self.count1(curr)
+            self.count(curr)
             lengths.append(self.node_counter)
             self.node_counter = 0
         lengths.sort(reverse=True)
@@ -73,13 +78,53 @@ def one() -> int:
         for line in f:
             lines.append(line.rstrip())
     g = Graph(lines, 1000)
-    return g.solve1()
+    return g.solve()
+
+
+class Graph2:
+    def __init__(self, input: list[str], length: int):
+        res: list[JunctionBox] = []
+        for line in input:
+            res.append(JunctionBox(line))
+        results = list(combinations(res, 2))
+        results.sort(key=lambda x: x[0].distance(x[1]), reverse=True)
+        self.sorted_distances = results
+        for first, second in self.sorted_distances:
+            print(first, second)
+        self.boxes: set[JunctionBox] = set()
+        self.length = length
+        self.node_counter = 0
+        self.marked: tuple[JunctionBox, JunctionBox] | None = None
+        self.single: set[JunctionBox] = set()
+        self.remaining: set[JunctionBox] = set()
+
+    def solve(self) -> int:
+        for _ in range(self.length):
+            first, second = self.sorted_distances.pop()
+            self.boxes.add(first)
+            self.boxes.add(second)
+            self.remaining.add(first)
+            self.remaining.add(second)
+            first.neighbors.add(second)
+            second.neighbors.add(first)
+
+        while not self.marked:
+            current = self.boxes.pop()
+        # while len(self.boxes) != 0:
+        # curr = self.remaining.pop()
+        # self.single.add(curr)
+        # self.count2(curr)
+        assert self.marked, "no solution yet"
+        return self.marked[0].x * self.marked[1].x
 
 
 def two() -> int:
+    lines: list[str] = []
     with open(get_path(DAY), "r") as f:
-        pass
-    return 0
+        for line in f:
+            lines.append(line.rstrip())
+    g = Graph(lines, 1000)
+    return g.solve2()
 
 
 if __name__ == "__main__":
@@ -106,4 +151,4 @@ if __name__ == "__main__":
         "425,690,689",
     ]
     g = Graph(inputs, 10)
-    print(g.solve1())
+    print(g.solve())
