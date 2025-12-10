@@ -112,12 +112,12 @@ class Graph:
 def one() -> int:
     g = Graph()
     answer = g.count_splits()
-    g.print()
+    # g.print()
     return answer
 
 
 def two() -> int:
     g = Graph()
     answer = g.quantum()
-    g.print()
+    # g.print()
     return answer
