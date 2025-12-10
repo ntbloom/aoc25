@@ -82,40 +82,43 @@ def one() -> int:
 
 
 class Graph2:
-    def __init__(self, input: list[str], length: int):
+    def __init__(self, input: list[str]):
         res: list[JunctionBox] = []
         for line in input:
             res.append(JunctionBox(line))
         results = list(combinations(res, 2))
         results.sort(key=lambda x: x[0].distance(x[1]), reverse=True)
         self.sorted_distances = results
-        for first, second in self.sorted_distances:
-            print(first, second)
+        # for idx, val in enumerate(self.sorted_distances):
+        # if idx < 100:
+        # print(val)
         self.boxes: set[JunctionBox] = set()
-        self.length = length
-        self.node_counter = 0
         self.marked: tuple[JunctionBox, JunctionBox] | None = None
         self.single: set[JunctionBox] = set()
-        self.remaining: set[JunctionBox] = set()
 
     def solve(self) -> int:
-        for _ in range(self.length):
-            first, second = self.sorted_distances.pop()
-            self.boxes.add(first)
-            self.boxes.add(second)
-            self.remaining.add(first)
-            self.remaining.add(second)
+        first, second = self.sorted_distances.pop()
+        first.neighbors.add(second)
+        second.neighbors.add(first)
+        self.single.add(first)
+        self.single.add(second)
+        self.boxes.add(first)
+        self.boxes.add(second)
+
+        while True:
             first.neighbors.add(second)
             second.neighbors.add(first)
+            for neighbor in first.neighbors | second.neighbors:
+                if neighbor in self.single:
+                    self.single.add(first)
+                    self.single.add(second)
+            self.boxes.add(first)
+            self.boxes.add(second)
 
-        while not self.marked:
-            current = self.boxes.pop()
-        # while len(self.boxes) != 0:
-        # curr = self.remaining.pop()
-        # self.single.add(curr)
-        # self.count2(curr)
-        assert self.marked, "no solution yet"
-        return self.marked[0].x * self.marked[1].x
+            if len(self.boxes) > 2 and self.boxes <= self.single:
+                print(f"{len(self.boxes)=}")
+                print(f"{self.boxes=}\n{self.single=}")
+                return first.x * second.x
 
 
 def two() -> int:
@@ -123,8 +126,8 @@ def two() -> int:
     with open(get_path(DAY), "r") as f:
         for line in f:
             lines.append(line.rstrip())
-    g = Graph(lines, 1000)
-    return g.solve2()
+    g = Graph2(lines)
+    return g.solve()
 
 
 if __name__ == "__main__":
