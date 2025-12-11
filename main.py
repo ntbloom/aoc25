@@ -6,7 +6,7 @@ try:
     import three  # noqa
     import four  # noqa
     import five  # noqa
-    import six  # noqa
+    import six_aoc  # noqa
     import seven  # noqa
     import eight  # noqa
     import nine  # noqa
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         3: "three",
         4: "four",
         5: "five",
-        6: "six",
+        6: "six_aoc",
         7: "seven",
         8: "eight",
         9: "nine",

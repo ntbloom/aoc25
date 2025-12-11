@@ -88,7 +88,7 @@ class Graph2:
             res.append(JunctionBox(line))
         results = list(combinations(res, 2))
         results.sort(key=lambda x: x[0].distance(x[1]), reverse=True)
-        self.sorted_distances = results
+        self.sorted_distances: list[tuple[JunctionBox, JunctionBox]] = results
         for val in self.sorted_distances:
             print(val)
         self.boxes: set[JunctionBox] = set()
@@ -96,29 +96,63 @@ class Graph2:
         self.single: set[JunctionBox] = set()
 
     def solve(self) -> int:
+        main_set: set[JunctionBox] = set()
+        aux_sets: list[set[JunctionBox]] = []
         first, second = self.sorted_distances.pop()
-        first.neighbors.add(second)
-        second.neighbors.add(first)
-        self.single.add(first)
-        self.single.add(second)
-        self.boxes.add(first)
-        self.boxes.add(second)
+        main_set.add(first)
+        main_set.add(second)
 
-        # while True:
-        #     first.neighbors.add(second)
-        #     second.neighbors.add(first)
-        #     for neighbor in first.neighbors | second.neighbors:
-        #         if neighbor in self.single:
-        #             self.single.add(first)
-        #             self.single.add(second)
-        #     self.boxes.add(first)
-        #     self.boxes.add(second)
+        current = self.sorted_distances.pop()
+        main_set.add(current[0])
+        main_set.add(current[1])
+        iters = 0
 
-        #     if len(self.boxes) > 2 and self.boxes <= self.single:
-        #         print(f"{len(self.boxes)=}")
-        #         print(f"{self.boxes=}\n{self.single=}")
-        #         break
-        return first.x * second.x
+        print()
+        while len(aux_sets) != 0 or iters < 5:
+            iters += 1
+            current = self.sorted_distances.pop()
+            print()
+            print(f"{main_set=}(len={len(main_set)})")
+            print(f"{aux_sets=}(len={len(aux_sets)})")
+            print(f"{current=}")
+            one, two = current
+
+            # see if any sets are populated
+            found_sets = []
+            for s in aux_sets:
+                if one in s or two in s:
+                    print("found in aux")
+                    found_sets.append(s)
+                    s.add(one)
+                    s.add(two)
+
+            # reduce aux sets
+            match len(found_sets):
+                case 0:
+                    print("no matches in aux")
+                    if one in main_set or two in main_set:
+                        print("found match in main")
+                        main_set.add(one)
+                        main_set.add(two)
+                    else:
+                        aux_sets.append(set([one, two]))
+                        print("making new set")
+                    continue
+                case _:
+                    first_set = found_sets.pop()
+                    for remaining in found_sets:
+                        print("combining with another set")
+                        first_set |= remaining
+                        aux_sets.remove(remaining)
+
+                    if one in main_set or two in main_set:
+                        print("combining with main set")
+                        main_set |= first_set
+                        aux_sets.remove(first_set)
+
+        print(f"{iters=},{len(self.sorted_distances)=}")
+        print(f"{current=}")
+        return current[0].x * current[1].x
 
 
 def two() -> int:

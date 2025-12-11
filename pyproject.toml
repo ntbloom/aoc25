@@ -4,7 +4,12 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = ["jinja2>=3.1.6", "pytest>=9.0.1", "rich>=14.2.0"]
+dependencies = [
+  "jinja2>=3.1.6",
+  "matplotlib>=3.10.8",
+  "pytest>=9.0.1",
+  "rich>=14.2.0",
+]
 
 [tool.pyright]
 venvPath = "."
