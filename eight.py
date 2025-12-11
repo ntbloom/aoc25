@@ -89,9 +89,8 @@ class Graph2:
         results = list(combinations(res, 2))
         results.sort(key=lambda x: x[0].distance(x[1]), reverse=True)
         self.sorted_distances = results
-        # for idx, val in enumerate(self.sorted_distances):
-        # if idx < 100:
-        # print(val)
+        for val in self.sorted_distances:
+            print(val)
         self.boxes: set[JunctionBox] = set()
         self.marked: tuple[JunctionBox, JunctionBox] | None = None
         self.single: set[JunctionBox] = set()
@@ -105,20 +104,21 @@ class Graph2:
         self.boxes.add(first)
         self.boxes.add(second)
 
-        while True:
-            first.neighbors.add(second)
-            second.neighbors.add(first)
-            for neighbor in first.neighbors | second.neighbors:
-                if neighbor in self.single:
-                    self.single.add(first)
-                    self.single.add(second)
-            self.boxes.add(first)
-            self.boxes.add(second)
+        # while True:
+        #     first.neighbors.add(second)
+        #     second.neighbors.add(first)
+        #     for neighbor in first.neighbors | second.neighbors:
+        #         if neighbor in self.single:
+        #             self.single.add(first)
+        #             self.single.add(second)
+        #     self.boxes.add(first)
+        #     self.boxes.add(second)
 
-            if len(self.boxes) > 2 and self.boxes <= self.single:
-                print(f"{len(self.boxes)=}")
-                print(f"{self.boxes=}\n{self.single=}")
-                return first.x * second.x
+        #     if len(self.boxes) > 2 and self.boxes <= self.single:
+        #         print(f"{len(self.boxes)=}")
+        #         print(f"{self.boxes=}\n{self.single=}")
+        #         break
+        return first.x * second.x
 
 
 def two() -> int:
@@ -153,5 +153,5 @@ if __name__ == "__main__":
         "984,92,344",
         "425,690,689",
     ]
-    g = Graph(inputs, 10)
+    g = Graph2(inputs)
     print(g.solve())
